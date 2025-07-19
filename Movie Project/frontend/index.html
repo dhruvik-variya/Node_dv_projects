@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>🎬 Movie Review App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f7f9fb, #e4ecf2);
+      padding: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #2f3542;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background-color: #ffffff;
+      border: 1px solid #dcdde1;
+      display: inline-block;
+      padding: 25px 35px;
+      border-radius: 12px;
+      margin: 30px 10px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s;
+    }
+
+    form:hover {
+      transform: translateY(-5px);
+    }
+
+    input {
+      width: 260px;
+      padding: 10px;
+      margin: 10px auto;
+      display: block;
+      border: 1px solid #ced6e0;
+      border-radius: 6px;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #1e90ff;
+      box-shadow: 0 0 5px rgba(30, 144, 255, 0.3);
+    }
+
+    button {
+      background-color: #1e90ff;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #3742fa;
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>👤 Create Account</h2>
+  <form id="registerForm">
+    <input placeholder="Username" id="regUsername" required />
+    <input placeholder="Email" id="regEmail" type="email" required />
+    <input placeholder="Password" id="regPassword" type="password" required />
+    <button type="submit">Register</button>
+  </form>
+
+  <h2>🔐 Login</h2>
+  <form id="loginForm">
+    <input placeholder="Email" id="logEmail" type="email" required />
+    <input placeholder="Password" id="logPassword" type="password" required />
+    <button type="submit">Login</button>
+  </form>
+
+  <h2>🎥 Add a Movie</h2>
+  <form id="movieForm">
+    <input placeholder="Title" id="title" required />
+    <input placeholder="Description" id="desc" required />
+    <input placeholder="Rating (1-10)" id="rating" type="number" min="1" max="10" required />
+    <input placeholder="Review" id="review" required />
+    <button type="submit">Submit Review</button>
+  </form>
+
+  <script>
+    let token = "";
+
+    document.getElementById("registerForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: regUsername.value,
+          email: regEmail.value,
+          password: regPassword.value
+        }),
+      });
+      const data = await res.json();
+      alert("✅ Registered Successfully!");
+    };
+
+    document.getElementById("loginForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: logEmail.value,
+          password: logPassword.value
+        }),
+      });
+      const data = await res.json();
+      token = data.token;
+      alert("✅ Logged In Successfully!");
+    };
+
+    document.getElementById("movieForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const res = await fetch("http://localhost:5000/api/movies", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": token
+        },
+        body: JSON.stringify({
+          title: title.value,
+          description: desc.value,
+          rating: rating.value,
+          review: review.value
+        }),
+      });
+      const data = await res.json();
+      alert("🎬 Movie added!");
+    };
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📖 My Book Store</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>📘 My Book Collection</h1>
+
+    <form action="/add" method="POST" class="book-form">
+      <input type="text" name="title" placeholder="Enter Book Title" required>
+      <input type="text" name="author" placeholder="Author Name" required>
+      <input type="number" name="price" placeholder="Price (₹)" required>
+      <button type="submit">➕ Add Book</button>
+    </form>
+
+    <h2>📚 Available Books</h2>
+    <ul class="book-list">
+      <% books.forEach(book => { %>
+        <li>
+          <strong><%= book.title %></strong> by <%= book.author %> — <span>₹<%= book.price %></span>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+</body>
+</html>
